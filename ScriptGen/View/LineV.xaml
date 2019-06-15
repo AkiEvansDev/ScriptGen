@@ -1,0 +1,49 @@
+﻿<UserControl 
+    x:Class="ScriptGen.View.LineV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d"
+    Width="200"
+    Height="200">
+    <Canvas>
+        <Thumb
+            x:Name="MainThumb"
+            Panel.ZIndex="20"
+            Width="20"
+            Height="20"
+            DragDelta="ThumbDragDelta"
+            DragCompleted="ThumbDragCompleted"/>
+        <Line
+            x:Name="SourceLine"
+            Stroke="{DynamicResource PrimaryHueDarkBrush}"
+            X1="{Binding SourceX, Mode=TwoWay}"
+            Y1="{Binding SourceY, Mode=TwoWay}"
+            X2="{Binding ElementName=ConnectionLine, Path=X1, Mode=OneWay}"
+            Y2="{Binding ElementName=SourceLine, Path=Y1, Mode=OneWay}"
+            StrokeThickness="2"
+            Cursor="SizeNS"
+            MouseDown="SourceLineMouseDown"/>
+        <Line
+            x:Name="ConnectionLine"
+            Stroke="{DynamicResource PrimaryHueDarkBrush}"
+            X1="{Binding ConnectionX, Mode=TwoWay}"
+            X2="{Binding ElementName=ConnectionLine, Path=X1, Mode=OneWay}"
+            Y1="{Binding ElementName=SourceLine, Path=Y1, Mode=OneWay}"
+            Y2="{Binding ElementName=TargetLine, Path=Y1, Mode=OneWay}"
+            StrokeThickness="2"
+            Cursor="SizeWE"
+            MouseDown="ConnectionLineMouseDown"/>
+        <Line
+            x:Name="TargetLine"
+            Stroke="{DynamicResource PrimaryHueDarkBrush}"
+            X1="{Binding TargetX, Mode=TwoWay}"
+            Y1="{Binding TargetY, Mode=TwoWay}"
+            X2="{Binding ElementName=ConnectionLine, Path=X1, Mode=OneWay}"
+            Y2="{Binding ElementName=TargetLine, Path=Y1, Mode=OneWay}"
+            StrokeThickness="2"
+            Cursor="SizeNS"
+            MouseDown="TargetLineMouseDown"/>
+    </Canvas>
+</UserControl>

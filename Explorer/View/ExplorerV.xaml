@@ -1,0 +1,174 @@
+﻿<UserControl 
+    x:Class="Explorer.View.ExplorerV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:conv="clr-namespace:Explorer.BindingConverter"
+    xmlns:comp="clr-namespace:Explorer"
+    mc:Ignorable="d"
+    PreviewMouseWheel="UserControlPreviewMouseWheel"
+    KeyDown="UserControlKeyDown">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Teal.xaml" />
+            </ResourceDictionary.MergedDictionaries>-->
+
+            <conv:ExplorerTypeToVisibleConverter
+                x:Key="ExplorerSaveVisible"/>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <md:DialogHost
+        x:Name="Dialog"
+        IsOpen="{Binding IsDialogOpen, Mode=TwoWay}"
+        Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
+        DialogMargin="8"
+        CloseOnClickAway="True">
+        <md:DialogHost.DialogContent>
+            <Grid
+                UseLayoutRounding="True"
+                Width="260"
+                Margin="8 8 8 4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <TextBlock
+                    FontSize="14"
+                    Text="Файл будет перезаписан! Продолжить?"/>
+                <StackPanel
+                    Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
+                    <Button
+                        x:Name="AcceptDialog"
+                        Command="{Binding AcceptDialog}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Padding="0"
+                        Width="40">
+                        ОК
+                    </Button>
+                    <Button
+                        x:Name="CancelDialog"
+                        Command="{Binding CancelDialog}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Padding="0"
+                        Width="80">
+                        ОТМЕНА
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </md:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <TextBox
+                x:Name="PathText"
+                Text="{Binding SelectPath, Mode=TwoWay}"
+                Tag="{Binding SelectItem, Mode=OneWayToSource}"
+                md:TransitionAssist.DisableTransitions="True"
+                Margin="16 4 24 4"
+                PreviewKeyDown="LostFocusOnEnter">
+            </TextBox>
+            <ScrollViewer
+                x:Name="Scroll"
+                Grid.Row="1"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto">
+                <TreeView
+                    ItemsSource="{Binding Drives, Mode=OneWay}"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                    SelectedItemChanged="SelectedItemChanged">
+                    <TreeView.ItemContainerStyle>
+                        <Style 
+                            BasedOn="{StaticResource MaterialDesignTreeViewItem}" 
+                            TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate
+                            ItemsSource="{Binding ChildNode, IsAsync=True}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <md:PackIcon
+                                    Kind="{Binding Kind, Mode=OneWay}"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 4 0"/>
+                                <comp:EditableTextBlock
+                                    IsEditable="{Binding IsEditable, Mode=OneWay}"
+                                    Text="{Binding Name, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </ScrollViewer>
+            <Grid
+                Margin="16 0 24 0"
+                Grid.Row="2">
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+                    <Button
+                        Visibility="{Binding TypeExplorer, Mode=OneWay, Converter={StaticResource ExplorerSaveVisible}}"
+                        Command="{Binding NewFolder}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Создать папку"
+                        HorizontalAlignment="Left"
+                        Padding="0"
+                        Width="32">
+                        <md:PackIcon
+                            Kind="CreateNewFolder"
+                            Width="22"
+                            Height="22"/>
+                    </Button>
+                    <Button
+                        Visibility="{Binding TypeExplorer, Mode=OneWay, Converter={StaticResource ExplorerSaveVisible}}"
+                        Command="{Binding NewFile}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Создать файл"
+                        HorizontalAlignment="Left"
+                        Padding="0"
+                        Width="32">
+                        <md:PackIcon
+                            Kind="FilePlus"
+                            Width="22"
+                            Height="22"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+                    <Button
+                        x:Name="Accept"
+                        Command="{Binding Accept}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Padding="0"
+                        Width="40">
+                        ОК
+                    </Button>
+                    <Button
+                        x:Name="Cancel"
+                        Command="{Binding Cancel}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Padding="0"
+                        Width="80">
+                        ОТМЕНА
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </md:DialogHost>
+</UserControl>

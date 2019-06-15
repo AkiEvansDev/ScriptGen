@@ -1,0 +1,35 @@
+﻿<UserControl 
+    x:Class="Explorer.EditableTextBlock"
+    x:Name="MainControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Explorer">
+    <UserControl.Resources>
+        <DataTemplate 
+            x:Key="EditModeTemplate">
+            <TextBox
+                Text="{Binding ElementName=MainControl, Path=Text, Mode=TwoWay}"
+                KeyDown="TextBoxKeyDown" 
+                Loaded="TextBoxLoaded"
+                LostFocus="TextBoxLostFocus" />
+        </DataTemplate>
+        <DataTemplate 
+            x:Key="DisplayModeTemplate">
+            <TextBlock
+                Text="{Binding ElementName=MainControl, Path=Text, Mode=OneWay}"
+                MouseDown="TextBlockMouseDown"/>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type local:EditableTextBlock}">
+            <Style.Triggers>
+                <Trigger Property="IsInEditMode" Value="True">
+                    <Setter Property="ContentTemplate" Value="{StaticResource EditModeTemplate}" />
+                </Trigger>
+                <Trigger Property="IsInEditMode" Value="False">
+                    <Setter Property="ContentTemplate" Value="{StaticResource DisplayModeTemplate}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+</UserControl>
+

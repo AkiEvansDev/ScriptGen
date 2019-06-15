@@ -1,0 +1,68 @@
+﻿<UserControl
+    x:Class="ScriptGen.View.PageV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:ScriptGen.View"
+    xmlns:bp="clr-namespace:ScriptGen.BindingProperty"
+    mc:Ignorable="d"
+    PreviewMouseWheel="UserControlPreviewMouseWheel"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <bp:DataBinding.DataBind>
+        <bp:DataBindCollection>
+            <bp:DataBind
+                Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ActualWidth}"
+                Target="{Binding ActualWidth, Mode=OneWayToSource}"/>
+            <bp:DataBind
+                Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ActualHeight}"
+                Target="{Binding ActualHeight, Mode=OneWayToSource}"/>
+        </bp:DataBindCollection>
+    </bp:DataBinding.DataBind>
+    <md:DialogHost
+        CloseOnClickAway="True">
+        <ScrollViewer
+            x:Name="Scroll"
+            bp:ScrollViewerBinding.VerticalOffset="{Binding ScrollVertical, Mode=TwoWay}"
+            bp:ScrollViewerBinding.HorizontalOffset="{Binding ScrollHorizontal, Mode=TwoWay}"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto"
+            Grid.Row="1">
+            <Grid>
+                <ItemsControl
+                    ItemsSource="{Binding Lines, Mode=OneWay}"
+                    Width="2800"
+                    Height="1575"
+                    Panel.ZIndex="1">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:LineV/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <ItemsControl
+                    ItemsSource="{Binding Tables, Mode=OneWay}"
+                    Width="2800"
+                    Height="1575"
+                    Panel.ZIndex="2">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:TableV/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+    </md:DialogHost>
+</UserControl>

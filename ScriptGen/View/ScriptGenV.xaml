@@ -1,0 +1,496 @@
+﻿<metro:MetroWindow
+    x:Class="ScriptGen.View.ScriptGenV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:locale="clr-namespace:ScriptGen.View"
+    xmlns:faker="clr-namespace:ScriptGen.Faker.View"
+    xmlns:bp="clr-namespace:ScriptGen.BindingProperty"
+    xmlns:comp="clr-namespace:Explorer;assembly=Explorer"
+    mc:Ignorable="d"
+    WindowState="Maximized"
+    Title="Script Gen" 
+    MinHeight="500"
+    MinWidth="700"
+    Height="800"
+    Width="1200">
+    <DockPanel
+        LastChildFill="True">
+        <Border
+            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+            BorderThickness="0 0 0 2"
+            DockPanel.Dock="Top">
+            <ToolBarTray
+                Background="{DynamicResource MaterialDesignPaper}"
+                IsLocked="True">
+                <ToolBar
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    Style="{DynamicResource MaterialDesignToolBar}"
+                    ClipToBounds="False">
+                    <Button
+                        Command="{Binding OpenSettings}"
+                        ToolTip="Параметры"
+                        Padding="6">
+                        <md:PackIcon
+                            Kind="Settings"/>
+                    </Button>
+                    <md:PopupBox
+                        Visibility="{Binding HavePlugins, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+                        PlacementMode="RightAndAlignTopEdges"
+                        StaysOpen="True">
+                        <md:PopupBox.ToggleContent>
+                            <md:PackIcon
+                                ToolTip="Плагины"
+                                Kind="Ballot"/>
+                        </md:PopupBox.ToggleContent>
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto"
+                            Width="250"
+                            MaxHeight="300">
+                            <ItemsControl
+                                ItemsSource="{Binding Plugins, Mode=OneWay}"
+                                Margin="8 0 8 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Content="{Binding ActionContent, Mode=OneTime}"
+                                            ToolTip="{Binding ActionToolTip, Mode=OneTime}"
+                                            Command="{Binding PluginCommand}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                            MaxWidth="200"
+                                            FontSize="14"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </md:PopupBox>
+                    <Button
+                        Command="{Binding OpenPage}"
+                        ToolTip="Открыть"
+                        Padding="6"
+                        Click="ClearFocus">
+                        <md:PackIcon
+                            Kind="Upload"/>
+                    </Button>
+                    <Button
+                        Command="{Binding SavePage}"
+                        ToolTip="Сохранить"
+                        Padding="6"
+                        Click="ClearFocus">
+                        <md:PackIcon
+                            Kind="Download"/>
+                    </Button>
+                </ToolBar>
+                <ToolBar
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    Style="{DynamicResource MaterialDesignToolBar}"
+                    ClipToBounds="False">
+                    <Button
+                        Command="{Binding AddPage}"
+                        ToolTip="Добавить модель"
+                        Padding="6">
+                        <md:PackIcon
+                            Kind="DatabasePlus"/>
+                    </Button>
+                    <Button
+                        Command="{Binding AddTable}"
+                        ToolTip="Создать таблицу"
+                        Padding="6">
+                        <md:PackIcon
+                            Kind="TablePlus"/>
+                    </Button>
+                    <Button
+                        Command="{Binding CheckError}"
+                        ToolTip="Проверить"
+                        Padding="6"
+                        Click="ClearFocus">
+                        <md:PackIcon
+                            Kind="BugCheck"/>
+                    </Button>
+                    <Button
+                        Command="{Binding GenerateScript}"
+                        ToolTip="Генерировать скрипт"
+                        Padding="6"
+                        Click="ClearFocus">
+                        <md:PackIcon
+                            Kind="ProgressDownload"/>
+                    </Button>
+                    <ComboBox
+                        SelectedIndex="{Binding TypeModel, Mode=TwoWay, Converter={StaticResource ModelTypeToInt}}"
+                        FontSize="14">
+                        <ComboBoxItem
+                            IsSelected="True"
+                            Content="Physical"/>
+                        <ComboBoxItem
+                            Content="Logical"/>
+                        <ComboBoxItem
+                            Content="Programming"/>
+                    </ComboBox>
+                </ToolBar>
+            </ToolBarTray>
+        </Border>
+        <StatusBar
+            DataContext="{Binding StatusBarManager}"
+            DockPanel.Dock="Bottom"
+            Height="30">
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="10 0">
+                <md:PackIcon
+                    Kind="{Binding Kind, Mode=OneWay}"/>
+                <TextBlock
+                    Text="{Binding Data, Mode=OneWay}"
+                    Margin="5 0 0 0"/>
+            </StackPanel>
+        </StatusBar>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" MinHeight="1"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" MinHeight="1"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="1"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="5*" MinWidth="1"/>
+                </Grid.ColumnDefinitions>
+                <Grid
+                    Background="{DynamicResource MaterialDesignPaper}">
+                    <TreeView 
+                        ItemsSource="{Binding Pages}">
+                        <TreeView.ItemContainerStyle>
+                            <Style 
+                                BasedOn="{StaticResource NoSelectTreeViewItem}" 
+                                TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="Padding" Value="0"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate
+                                ItemsSource="{Binding Tables}">
+                                <StackPanel 
+                                    Orientation="Horizontal">
+                                    <md:PackIcon
+                                        Kind="Database"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 4 0"/>
+                                    <TextBox
+                                        Text="{Binding Name, Mode=TwoWay}"
+                                        md:HintAssist.Hint="Модель"
+                                        MinWidth="100"
+                                        FontSize="14"
+                                        KeyDown="LostFocusOnEnter"/>
+                                </StackPanel>
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <HierarchicalDataTemplate
+                                        ItemsSource="{Binding Fields}">
+                                        <StackPanel 
+                                            Orientation="Horizontal">
+                                            <md:PackIcon
+                                                Kind="Table"
+                                                VerticalAlignment="Center"
+                                                Margin="0 0 4 0"/>
+                                            <TextBox
+                                                Text="{Binding Name, Mode=TwoWay}"
+                                                md:HintAssist.Hint="Таблица"
+                                                MinWidth="100"
+                                                FontSize="14"
+                                                KeyDown="LostFocusOnEnter"/>
+                                        </StackPanel>
+                                        <HierarchicalDataTemplate.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel 
+                                                    Orientation="Horizontal">
+                                                    <md:PackIcon
+                                                        Kind="{Binding Type, Converter={StaticResource Icon}, Mode=OneWay}"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0 0 4 0"/>
+                                                    <TextBox
+                                                        Text="{Binding Name, Mode=TwoWay}"
+                                                        md:HintAssist.Hint="Поле"
+                                                        MinWidth="100"
+                                                        FontSize="14"
+                                                        KeyDown="LostFocusOnEnter"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </HierarchicalDataTemplate.ItemTemplate>
+                                    </HierarchicalDataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+                <GridSplitter
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    ShowsPreview="False"
+                    Grid.Column="1"
+                    Width="3"/>
+                <Grid
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ItemsControl
+                            ItemsSource="{Binding Pages, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton
+                                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                        IsChecked="{Binding IsSelect, Mode=TwoWay}"
+                                        Command="{Binding SelectPage}"
+                                        GroupName="Pages"
+                                        Padding="8 0 0 0"
+                                        MaxWidth="200">
+                                        <StackPanel
+                                            Orientation="Horizontal">
+                                            <comp:EditableTextBlock
+                                                Text="{Binding Name, Mode=TwoWay}"
+                                                MaxWidth="158"/>
+                                            <Button
+                                                Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                Command="{Binding RemovePage}"
+                                                ToolTip="Закрыть модель"
+                                                VerticalAlignment="Bottom"
+                                                Padding="0"
+                                                Height="22"
+                                                Margin="4 0 0 0"
+                                                Width="22">
+                                                <md:PackIcon
+                                                    Kind="DatabaseMinus"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </RadioButton>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                    <md:PopupBox
+                        Visibility="{Binding HavePages, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+                        Grid.Column="1"
+                        PlacementMode="LeftAndAlignTopEdges"
+                        StaysOpen="True">
+                        <md:PopupBox.ToggleContent>
+                            <md:PackIcon
+                                Margin="8 8 0 0"
+                                Width="22"
+                                Height="22"
+                                Kind="MenuDown"/>
+                        </md:PopupBox.ToggleContent>
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto"
+                            Width="250"
+                            MaxHeight="300">
+                            <ItemsControl
+                                ItemsSource="{Binding Pages, Mode=OneWay}"
+                                Margin="16 8 16 8">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton
+                                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                            IsChecked="{Binding IsSelect, Mode=TwoWay}"
+                                            Command="{Binding SelectPage}"
+                                            HorizontalContentAlignment="Left"
+                                            GroupName="Pages"
+                                            Padding="0"
+                                            Margin="0"
+                                            Width="200">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="178"/>
+                                                    <ColumnDefinition Width="22"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    Text="{Binding Name, Mode=OneWay}"/>
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Command="{Binding RemovePage}"
+                                                    ToolTip="Закрыть модель"
+                                                    VerticalAlignment="Bottom"
+                                                    Padding="0"
+                                                    Height="22"
+                                                    Width="22">
+                                                    <md:PackIcon
+                                                        Kind="DatabaseMinus"/>
+                                                </Button>
+                                            </Grid>
+                                        </RadioButton>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </md:PopupBox>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2">
+                        <ItemsControl
+                            ItemsSource="{Binding Pages, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <locale:PageV
+                                        Visibility="{Binding IsSelect, Mode=OneWay, Converter={StaticResource BoolVisible}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <bp:DataBinding.DataBind>
+                            <bp:DataBindCollection>
+                                <bp:DataBind
+                                    Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"
+                                    Target="{Binding ActualWidth, Mode=OneWayToSource}"/>
+                                <bp:DataBind
+                                    Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight}"
+                                    Target="{Binding ActualHeight, Mode=OneWayToSource}"/>
+                            </bp:DataBindCollection>
+                        </bp:DataBinding.DataBind>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <GridSplitter
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                ShowsPreview="False"
+                Grid.Row="1"
+                Height="3"/>
+            <Grid
+                Background="{DynamicResource MaterialDesignPaper}"
+                Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="1"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="0.5*" MinWidth="1"/>
+                </Grid.ColumnDefinitions>
+                <faker:FakerV
+                    DataContext="{Binding FakerContext}"/>
+                <GridSplitter
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    ShowsPreview="False"
+                    Grid.Column="1"
+                    Width="3"/>
+                <Grid
+                    DataContext="{Binding StatusBarManager}"
+                    Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border
+                        BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                        BorderThickness="0 0 0 2"
+                        VerticalAlignment="Bottom"/>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="10 0 0 0">
+                        <TextBlock
+                            Style="{StaticResource MaterialDesignSubheadingTextBlock}"
+                            VerticalAlignment="Center"
+                            Text="История"/>
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 0">
+                        <Button
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding ClearHistory}"
+                            ToolTip="Очистить историю"
+                            Padding="0"
+                            Height="30"
+                            Width="30">
+                            <md:PackIcon
+                                Kind="Backspace"/>
+                        </Button>
+                    </StackPanel>
+                    <ScrollViewer
+                        Grid.Row="1"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto"
+                        Padding="5">
+                        <ItemsControl
+                            ItemsSource="{Binding History, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid
+                                        Margin="0 0 0 4"
+                                        MinHeight="26">
+                                        <md:PackIcon
+                                            Foreground="{Binding Kind, Mode=OneTime, Converter={StaticResource SwitchMessageColor}}"
+                                            Kind="{Binding Kind, Mode=OneTime}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Width="20"
+                                            Height="20"/>
+                                        <TextBlock
+                                            Text="{Binding Data, Mode=OneTime}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            TextWrapping="Wrap"
+                                            Margin="25 0 0 0"
+                                            FontSize="14"/>
+                                        <Button
+                                            Visibility="{Binding IsVisible, Mode=OneTime, Converter={StaticResource BoolVisible}}"
+                                            Content="{Binding ActionTitle, Mode=OneTime}"
+                                            Command="{Binding ActionCommand, Mode=OneTime}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}"
+                                            VerticalContentAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"
+                                            FontSize="12"
+                                            Padding="6 0"
+                                            Margin="10 0"
+                                            Height="26"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</metro:MetroWindow>

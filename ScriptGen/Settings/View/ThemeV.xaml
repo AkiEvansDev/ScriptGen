@@ -1,0 +1,68 @@
+﻿<UserControl 
+    x:Class="ScriptGen.Settings.View.ThemeV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" >
+    <StackPanel
+        Margin="20">
+        <TextBlock
+            Style="{StaticResource MaterialDesignTitleTextBlock}"
+            Height="34"
+            Text="Персонализация"/>
+        <StackPanel
+            Orientation="Horizontal">
+            <TextBlock
+                VerticalAlignment="Center"
+                Text="Тема: "
+                FontSize="14"/>
+            <ComboBox
+                Margin="10 0 0 0"
+                FontSize="14">
+                <ComboBoxItem
+                    x:Name="DarkMode"
+                    IsSelected="{Binding IsDark, Mode=TwoWay}"
+                    Content="Dark"/>
+                <ComboBoxItem
+                    IsSelected="{Binding ElementName=DarkMode, Path=IsSelected, Converter={StaticResource InvBool}}"
+                    Content="Light"/>
+            </ComboBox>
+        </StackPanel>
+        <TextBlock
+            Margin="0 4 0 0"
+            Text="Цвет: "
+            FontSize="14"/>
+        <ItemsControl
+            ItemsSource="{Binding Colors, Mode=OneTime}"
+            Margin="0 10 0 0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        Width="48"
+                        Height="48">
+                        <Border
+                            Visibility="{Binding IsSelect, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                            BorderThickness="2"
+                            Width="48"
+                            Height="48"/>
+                        <Button
+                            Command="{Binding SelectColor}"
+                            ToolTip="{Binding Name, Mode=OneTime}"
+                            Background="{Binding Color, Mode=OneTime}"
+                            BorderBrush="{x:Null}"
+                            Margin="4 5 4 4"
+                            Width="40"
+                            Height="40"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

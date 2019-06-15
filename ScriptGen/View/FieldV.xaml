@@ -1,0 +1,211 @@
+﻿<UserControl 
+    x:Class="ScriptGen.View.FieldV"
+    x:Name="MainControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    mc:Ignorable="d"
+    ToolTip="{Binding Message, Mode=OneWay}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger 
+            EventName="Loaded">
+            <i:InvokeCommandAction
+                Command="{Binding Loaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid
+        Margin="2 -2 3 2">
+        <Grid.Style>
+            <Style TargetType="{x:Type Grid}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding FocusedElement}" Value="Name">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FieldName}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding FocusedElement}" Value="LogicalName">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FieldLogicalName}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding FocusedElement}" Value="ProgrammingName">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FieldProgrammingName}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding FocusedElement}" Value="DataType">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FieldDataType}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding FocusedElement}" Value="ProgrammingType">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FieldProgrammingType}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="28"/>
+        </Grid.ColumnDefinitions>
+        <md:PackIcon
+            Visibility="{Binding IsError, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+            Foreground="#C51162"
+            Kind="WarningBox"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            Margin="-34 0 0 0"
+            Width="24"
+            Height="24"/>
+        <TextBox
+            x:Name="FieldName"
+            Text="{Binding Name, Mode=TwoWay}"
+            Visibility="{Binding TypeModel, Converter={StaticResource PhysicalVisible}, Mode=OneWay}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            ScrollViewer.ScrollChanged="StopScrollChanged"
+            md:HintAssist.Hint="Название"
+            FontSize="14">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                    Command="{Binding NameEnter}"/>
+                <KeyBinding Key="Up" 
+                    Command="{Binding NameUp}"/>
+                <KeyBinding Key="Down" 
+                    Command="{Binding NameDown}"/>
+            </TextBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="LostFocus">
+                    <i:InvokeCommandAction
+                        Command="{Binding LostFocus}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <TextBox
+            x:Name="FieldLogicalName"
+            Text="{Binding LogicalName, Mode=TwoWay}"
+            Visibility="{Binding TypeModel, Converter={StaticResource LogicalVisible}, Mode=OneWay}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            ScrollViewer.ScrollChanged="StopScrollChanged"
+            md:HintAssist.Hint="Логическое название"
+            Grid.ColumnSpan="2"
+            FontSize="14">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                    Command="{Binding NameEnter}"/>
+                <KeyBinding Key="Up" 
+                    Command="{Binding NameUp}"/>
+                <KeyBinding Key="Down" 
+                    Command="{Binding NameDown}"/>
+            </TextBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="LostFocus">
+                    <i:InvokeCommandAction
+                        Command="{Binding LostFocus}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <TextBox
+            x:Name="FieldProgrammingName"
+            Text="{Binding ProgrammingName, Mode=TwoWay}"
+            Visibility="{Binding TypeModel, Converter={StaticResource ProgrammingVisible}, Mode=OneWay}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            ScrollViewer.ScrollChanged="StopScrollChanged"
+            md:HintAssist.Hint="Название"
+            AcceptsReturn="False"
+            FontSize="14">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                    Command="{Binding NameEnter}"/>
+                <KeyBinding Key="Up" 
+                    Command="{Binding NameUp}"/>
+                <KeyBinding Key="Down" 
+                    Command="{Binding NameDown}"/>
+            </TextBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="LostFocus">
+                    <i:InvokeCommandAction
+                        Command="{Binding LostFocus}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <ComboBox
+            x:Name="FieldDataType"
+            Text="{Binding DataType, Mode=TwoWay}"
+            ItemsSource="{Binding DataTypeSource, Mode=OneWay}"
+            Visibility="{Binding TypeModel, Converter={StaticResource PhysicalVisible}, Mode=OneWay}"
+            IsEnabled="{Binding Type, Converter={StaticResource DisabledFK}, Mode=OneTime}"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ScrollViewer.ScrollChanged="StopScrollChanged"
+            Grid.Column="1"
+            Margin="0 0 4 0"
+            md:HintAssist.Hint="Тип данных"
+            IsEditable="True"
+            FontSize="14">
+            <ComboBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                    Command="{Binding DataTypeEnter}"/>
+            </ComboBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="LostFocus">
+                    <i:InvokeCommandAction
+                        Command="{Binding LostFocus}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+        <ComboBox
+            x:Name="FieldProgrammingType"
+            Text="{Binding ProgrammingType, Mode=TwoWay}"
+            ItemsSource="{Binding ProgrammingTypeSource, Mode=OneWay}"
+            Visibility="{Binding TypeModel, Converter={StaticResource ProgrammingVisible}, Mode=OneWay}"
+            IsEnabled="{Binding Type, Converter={StaticResource DisabledFK}, Mode=OneTime}"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ScrollViewer.ScrollChanged="StopScrollChanged"
+            Grid.Column="1"
+            Margin="0 0 4 0"
+            md:HintAssist.Hint="Тип данных"
+            IsEditable="True"
+            FontSize="14">
+            <ComboBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                    Command="{Binding ProgrammingTypeEnter}"/>
+            </ComboBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="LostFocus">
+                    <i:InvokeCommandAction
+                        Command="{Binding LostFocus}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+        <CheckBox
+            IsChecked="{Binding IsNull, Mode=OneWayToSource}"
+            IsEnabled="{Binding Type, Converter={StaticResource DisabledPK}, Mode=OneTime}"
+            Style="{DynamicResource MaterialDesignCheckBox}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Grid.Column="2"
+            ToolTip="IsNull"/>
+        <CheckBox
+            IsChecked="{Binding IsUnique, Mode=TwoWay}"
+            IsEnabled="{Binding Type, Converter={StaticResource DisabledPK}, Mode=OneTime}"
+            Style="{DynamicResource MaterialDesignCheckBox}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Grid.Column="3"
+            ToolTip="IsUnique"/>
+        <Button
+            Command="{Binding RemoveElement}"
+            IsEnabled="{Binding Type, Converter={StaticResource DisabledPK}, Mode=OneTime}"
+            Style="{DynamicResource MaterialDesignFlatButton}"
+            Grid.Column="4"
+            Padding="0"
+            Width="24"
+            Height="24"
+            ToolTip="Удалить поле">
+            <md:PackIcon
+                Kind="TableRowRemove"/>
+        </Button>
+    </Grid>
+</UserControl>

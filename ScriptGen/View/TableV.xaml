@@ -1,0 +1,203 @@
+﻿<UserControl 
+    x:Class="ScriptGen.View.TableV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:ScriptGen.View"
+    mc:Ignorable="d"
+    Background="{DynamicResource MaterialDesignPaper}"
+    BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+    Width="{Binding Width, Mode=TwoWay}"
+    Margin="{Binding Margin, Mode=TwoWay}"
+    ToolTip="{Binding Message, Mode=OneWay}"
+    md:ShadowAssist.ShadowDepth="Depth2"
+    BorderThickness="2">
+    <i:Interaction.Triggers>
+        <i:EventTrigger
+            EventName="Loaded">
+            <i:InvokeCommandAction
+                Command="{Binding Loaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid
+            Visibility="{Binding IsSelect, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+            Panel.ZIndex="10"
+            Background="Black"
+            Opacity="0.5"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="2">
+            <i:Interaction.Triggers>
+                <i:EventTrigger 
+                    EventName="MouseDown">
+                    <i:InvokeCommandAction
+                        Command="{Binding SelectElement}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Grid>
+        <Thumb
+            Grid.ColumnSpan="2"
+            Cursor="SizeAll"
+            DragDelta="Move_DragDelta">
+        </Thumb>
+        <Thumb
+            Grid.Column="1"
+            Grid.Row="1"
+            Cursor="SizeWE"
+            DragDelta="Resize_DragDelta"/>
+        <StackPanel
+            Grid.Row="1"
+            Margin="2 2 0 2">
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FocusedElement}" Value="Name">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=TableName}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FocusedElement}" Value="LogicalName">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=TableLogicalName}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FocusedElement}" Value="ProgrammingName">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=TableProgrammingName}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <md:PackIcon
+                    Visibility="{Binding IsError, Mode=OneWay, Converter={StaticResource BoolVisible}}"
+                    Foreground="#C51162"
+                    Kind="WarningBox"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Margin="-32 0 0 0"
+                    Width="24"
+                    Height="24"/>
+                <Button
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Command="{Binding SelectElement}"
+                    ToolTip="Связать таблицу"
+                    Margin="-2 -4 0 0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Padding="0"
+                    Width="21"
+                    Height="21">
+                    <md:PackIcon
+                        Width="18"
+                        Height="18"
+                        Kind="ArrangeBringForward"/>
+                </Button>
+                <TextBox 
+                    x:Name="TableName"
+                    Text="{Binding Name, Mode=TwoWay}"
+                    Visibility="{Binding TypeModel, Converter={StaticResource PhysicalVisible}, Mode=OneWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    ScrollViewer.ScrollChanged="StopScrollChanged"
+                    md:HintAssist.Hint="Название таблицы"
+                    Grid.Column="1"
+                    FontSize="14">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+                            Command="{Binding NameEnter}"/>
+                        <KeyBinding Key="Down" 
+                            Command="{Binding NameEnter}"/>
+                    </TextBox.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger 
+                            EventName="LostFocus">
+                            <i:InvokeCommandAction
+                                Command="{Binding LostFocus}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <TextBox 
+                    x:Name="TableLogicalName"
+                    Text="{Binding LogicalName, Mode=TwoWay}"
+                    Visibility="{Binding TypeModel, Converter={StaticResource LogicalVisible}, Mode=OneWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    ScrollViewer.ScrollChanged="StopScrollChanged"
+                    md:HintAssist.Hint="Логическое название таблицы"
+                    Grid.Column="1"
+                    FontSize="14">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+                            Command="{Binding NameEnter}"/>
+                        <KeyBinding Key="Down" 
+                            Command="{Binding NameEnter}"/>
+                    </TextBox.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger 
+                            EventName="LostFocus">
+                            <i:InvokeCommandAction
+                                Command="{Binding LostFocus}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <TextBox 
+                    x:Name="TableProgrammingName"
+                    Text="{Binding ProgrammingName, Mode=TwoWay}"
+                    Visibility="{Binding TypeModel, Converter={StaticResource ProgrammingVisible}, Mode=OneWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    ScrollViewer.ScrollChanged="StopScrollChanged"
+                    md:HintAssist.Hint="Название таблицы"
+                    Grid.Column="1"
+                    FontSize="14">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" 
+                            Command="{Binding NameEnter}"/>
+                        <KeyBinding Key="Down" 
+                            Command="{Binding NameEnter}"/>
+                    </TextBox.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger 
+                            EventName="LostFocus">
+                            <i:InvokeCommandAction
+                                Command="{Binding LostFocus}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Button
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Command="{Binding RemoveElement}"
+                    Grid.Column="2"
+                    Padding="0"
+                    Width="24"
+                    Height="24"
+                    ToolTip="Удалить таблицу">
+                    <md:PackIcon
+                        Kind="TableRemove"/>
+                </Button>
+            </Grid>
+            <ItemsControl
+                ItemsSource="{Binding Fields, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:FieldV/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

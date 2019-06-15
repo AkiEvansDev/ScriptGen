@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGen", "ScriptGen\ScriptGen.csproj", "{66391494-473E-410F-8180-FBCF6BA44814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGenPlugin", "ScriptGenPlagin\ScriptGenPlugin.csproj", "{0DB2194C-EA3B-4580-8B2A-097E1C11C459}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer", "Explorer\Explorer.csproj", "{22B200D2-4C7F-406D-A0BE-193C39C2282E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseMVVM", "BaseMVVM\BaseMVVM.csproj", "{0620E292-8076-4376-8B2C-BEFDDB25F080}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDictionary", "DataDictionary\DataDictionary.csproj", "{8C1A2C20-44A3-4FED-AD1A-93F0A1545257}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{3618918B-BE6D-43B2-AE6A-FA445347E09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{06715079-9526-49D5-B302-20CAADFCDDEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66391494-473E-410F-8180-FBCF6BA44814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66391494-473E-410F-8180-FBCF6BA44814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66391494-473E-410F-8180-FBCF6BA44814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66391494-473E-410F-8180-FBCF6BA44814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB2194C-EA3B-4580-8B2A-097E1C11C459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB2194C-EA3B-4580-8B2A-097E1C11C459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB2194C-EA3B-4580-8B2A-097E1C11C459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB2194C-EA3B-4580-8B2A-097E1C11C459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22B200D2-4C7F-406D-A0BE-193C39C2282E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22B200D2-4C7F-406D-A0BE-193C39C2282E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22B200D2-4C7F-406D-A0BE-193C39C2282E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22B200D2-4C7F-406D-A0BE-193C39C2282E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0620E292-8076-4376-8B2C-BEFDDB25F080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0620E292-8076-4376-8B2C-BEFDDB25F080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0620E292-8076-4376-8B2C-BEFDDB25F080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0620E292-8076-4376-8B2C-BEFDDB25F080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C1A2C20-44A3-4FED-AD1A-93F0A1545257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C1A2C20-44A3-4FED-AD1A-93F0A1545257}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C1A2C20-44A3-4FED-AD1A-93F0A1545257}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C1A2C20-44A3-4FED-AD1A-93F0A1545257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3618918B-BE6D-43B2-AE6A-FA445347E09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3618918B-BE6D-43B2-AE6A-FA445347E09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3618918B-BE6D-43B2-AE6A-FA445347E09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3618918B-BE6D-43B2-AE6A-FA445347E09A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06715079-9526-49D5-B302-20CAADFCDDEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06715079-9526-49D5-B302-20CAADFCDDEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06715079-9526-49D5-B302-20CAADFCDDEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06715079-9526-49D5-B302-20CAADFCDDEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {955BC755-5C8B-4245-8725-D43634CDED16}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal
